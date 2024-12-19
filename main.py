@@ -50,19 +50,19 @@ snake_speed = 13
 # 画像の読み込み
 
 # 矢印キー
-key_image = pygame.image.load("矢印キー.png")
+key_image = pygame.image.load("img/矢印キー.png")
 key_image = pygame.transform.scale(key_image, (250, 150))
 
 # 蛇のあたま
-snake_head_image = pygame.image.load("snake-head.png")
+snake_head_image = pygame.image.load("img/snake-head.png")
 snake_head_image = pygame.transform.scale(snake_head_image, ((size_block*32/26)+1, (size_block*32/26)+1))
 
 # えさ
-food_image = pygame.image.load("food.png")
+food_image = pygame.image.load("img/food.png")
 food_image = pygame.transform.scale(food_image, (size_block, size_block))
 
 # 障害物
-wall_image = pygame.image.load("poison_mushroom.png")
+wall_image = pygame.image.load("img/poison_mushroom.png")
 wall_image = pygame.transform.scale(wall_image, (size_block*11, size_block*11))
 
 
