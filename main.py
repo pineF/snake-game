@@ -50,7 +50,7 @@ snake_speed = 13
 # 画像の読み込み
 
 # 矢印キー
-key_image = pygame.image.load("img/矢印キー.png")
+key_image = pygame.image.load("img/key.png")
 key_image = pygame.transform.scale(key_image, (250, 150))
 
 # 蛇のあたま
