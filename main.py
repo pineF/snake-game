@@ -50,7 +50,7 @@ snake_speed = 13
 # 画像の読み込み
 
 # 矢印キー
-key_image = pygame.image.load("img/矢印キー.png")
+key_image = pygame.image.load("img/key.png")
 key_image = pygame.transform.scale(key_image, (250, 150))
 
 # 蛇のあたま
@@ -205,7 +205,7 @@ MEDIUM = "medium"
 HARD = "hard"
 
 # 難易度選択画面の表示関数
-def choose_difficulty():
+async def choose_difficulty():
     pygame.init()
     dis = pygame.display.set_mode((dis_width, dis_height))
     pygame.display.set_caption("Mode Selection")
@@ -240,6 +240,7 @@ def choose_difficulty():
         
         
         pygame.display.update()
+        await asyncio.sleep(0)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -259,7 +260,7 @@ def choose_difficulty():
 
 
 # ランキング表示＆遷移
-def show_ranking_and_wait(dis, font, scores, modes, mode_names):
+async def show_ranking_and_wait(dis, font, scores, modes, mode_names):
     """ランキングを表示し、Cキーが押されたらモード選択に戻る"""
     draw_background(dis)
     
@@ -297,6 +298,7 @@ def show_ranking_and_wait(dis, font, scores, modes, mode_names):
 
     waiting_for_input = True
     while waiting_for_input:
+        await asyncio.sleep(0)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return "a"
@@ -314,7 +316,7 @@ def show_ranking_and_wait(dis, font, scores, modes, mode_names):
 
 async def game_loop():
           
-    difficulty = choose_difficulty()  # 難易度を取得
+    difficulty = await choose_difficulty()  # 難易度を取得
     
     if difficulty is None:
         game_init = True
@@ -332,7 +334,6 @@ async def game_loop():
         pygame.display.set_caption("Snake Game by Edureka")
 
         clock = pygame.time.Clock()
-        await asyncio.sleep(0)
 
         ### フォント設定 ########################################
         font_score = pygame.font.SysFont("cooperblack", 35)
@@ -376,10 +377,10 @@ async def game_loop():
             # ランキング表示と選択結果の処理
             modes = [EASY, MEDIUM, HARD]
             mode_names = ["EASY", "MEDIUM", "HARD"]
-            result = show_ranking_and_wait(dis, font_score, length_of_snake - 1, modes, mode_names)
+            result = await show_ranking_and_wait(dis, font_score, length_of_snake - 1, modes, mode_names)
 
             if result == "mode_selection":
-                difficulty = choose_difficulty()  # モード選択に戻る
+                difficulty = await choose_difficulty()  # モード選択に戻る
                 if difficulty == None:
                     game_close = True
                 else:
@@ -482,6 +483,7 @@ async def game_loop():
             pygame.display.update()
 
             clock.tick(snake_speed)
+            await asyncio.sleep(0)
 
 
 # In[8]:
