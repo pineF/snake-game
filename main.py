@@ -57,6 +57,28 @@ key_image = pygame.transform.scale(key_image, (250, 150))
 snake_head_image = pygame.image.load("img/snake_head.png")
 snake_head_image = pygame.transform.scale(snake_head_image, ((size_block*32/26)+1, (size_block*32/26)+1))
 
+# 蛇の口
+snake_mouth_image = pygame.image.load("img/snake_mouth.png")
+snake_mouth_image = pygame.transform.scale(snake_mouth_image, (35, 810))
+
+cut_rect1 = pygame.Rect(0, 324, 35, 54)  # 切り取る領域を指定 (例: (x, y, 幅, 高さ))
+snake_mouth_image = snake_mouth_image.subsurface(cut_rect1) # `subsurface` を使って部分的に切り取る
+snake_mouth_image = pygame.transform.scale(snake_mouth_image, (size_block*1.4, size_block*1.4))
+snake_mouth_image = pygame.transform.rotate(snake_mouth_image, 90)
+
+# 蛇の舌
+snake_tongue_image = pygame.image.load("img/snake_tongue.png")
+snake_tongue_image = pygame.transform.scale(snake_tongue_image, (48, 504))
+
+snake_tongue_images = []
+for i in range(21):
+    cut_rect2 = pygame.Rect(0, i * 24, 48, 24)
+    tongue_image = snake_tongue_image.subsurface(cut_rect2)
+    tongue_image = pygame. transform.scale(tongue_image, (size_block*1.1, size_block*1.1))
+    tongue_image = pygame.transform.rotate(tongue_image, 90)
+    snake_tongue_images.append(tongue_image) #1枚の画像をn回追加する
+    snake_tongue_images.append(tongue_image)
+
 # えさ
 food_image = pygame.image.load("img/food.png")
 food_image = pygame.transform.scale(food_image, (size_block, size_block))
@@ -77,27 +99,82 @@ def show_score(dis, font, score):
     dis.blit(value, [5, 0])
 
 # 蛇の描画
-def draw_snake(dis, snake_list, snake_head_image, x_change, y_change):
+# グローバル変数として定義
+tongue_index = 0  
+tongue_counter = 0   # 舌を表示するマス数をカウント
+tongue_active = False  # 舌がアクティブかどうか
+
+def draw_snake(dis, snake_list, snake_head_image, snake_mouth_image, snake_tongue_images, key_press, x_change, y_change, food_x, food_y):
+    global tongue_active, tongue_counter, tongue_index
+    # 餌の周囲?マスの座標を計算
+    adjacent_positions = [(food_x - 2, food_y - 2), (food_x - 1, food_y - 2), (food_x, food_y - 2), (food_x + 1, food_y - 2), (food_x + 2, food_y - 2),
+                          (food_x - 2, food_y - 1), (food_x - 1, food_y - 1), (food_x, food_y - 1), (food_x + 1, food_y - 1), (food_x + 2, food_y - 1),
+                          (food_x - 2, food_y),     (food_x - 1, food_y),                           (food_x + 1, food_y),     (food_x + 2, food_y),
+                          (food_x - 2, food_y + 1), (food_x - 1, food_y + 1), (food_x, food_y + 1), (food_x + 1, food_y + 1), (food_x + 2, food_y - 1),
+                          (food_x - 2, food_y + 2), (food_x - 1, food_y + 2), (food_x, food_y + 2), (food_x + 1, food_y + 2), (food_x + 2, food_y - 2)]
+
     for i, (x, y) in enumerate(snake_list):
-        if i == len(snake_list) - 1:  # 先頭部分
+        if i == len(snake_list) - 1:  # 蛇の頭
             # 進行方向に応じて画像を回転
             if x_change == 1 and y_change == 0:  # 右方向
-                rotated_image = pygame.transform.rotate(snake_head_image, 270)
+                rotated_head = pygame.transform.rotate(snake_head_image, 270)
+                rotated_mouth = pygame.transform.rotate(snake_mouth_image, 270)
             elif x_change == -1 and y_change == 0:  # 左方向
-                rotated_image = pygame.transform.rotate(snake_head_image, 90)
+                rotated_head = pygame.transform.rotate(snake_head_image, 90)
+                rotated_mouth = pygame.transform.rotate(snake_mouth_image, 90)
             elif x_change == 0 and y_change == 1:  # 下方向
-                rotated_image = pygame.transform.rotate(snake_head_image, 180)
+                rotated_head = pygame.transform.rotate(snake_head_image, 180)
+                rotated_mouth = pygame.transform.rotate(snake_mouth_image, 180)
             elif x_change == 0 and y_change == -1:  # 上方向
-                rotated_image = pygame.transform.rotate(snake_head_image, 0)
+                rotated_head = pygame.transform.rotate(snake_head_image, 0)
+                rotated_mouth = pygame.transform.rotate(snake_mouth_image, 0)
             else:
-                rotated_image = snake_head_image  # デフォルト
+                rotated_head = snake_head_image
+                rotated_mouth = snake_mouth_image
 
-            # 画像の幅と高さを取得
-            img_width, img_height = rotated_image.get_size()
+            # 頭を描画
+            head_width, head_height = rotated_head.get_size()
+            dis.blit(rotated_head, (x * size_block + (size_block - head_width) / 2, 
+                                    y * size_block + (size_block - head_height) / 2))
 
-            # セルの中心に配置
-            dis.blit(rotated_image, (x * size_block + (size_block - img_width) / 2, 
-                                     y * size_block + (size_block - img_height) / 2))
+            # 頭が餌の周囲?マスにいる場合、口を描画
+            if (x, y) in adjacent_positions:
+                tongue_active = False
+                mouth_width, mouth_height = rotated_mouth.get_size()
+                dis.blit(rotated_mouth, ((x + x_change * 0.8) * size_block + (size_block - mouth_width) / 2,
+                                         (y + y_change * 0.8) * size_block + (size_block - mouth_height) / 2))
+            if tongue_active and key_press:  # 舌を表示する場合
+                rotated_tongue = pygame.transform.rotate(snake_tongue_images[tongue_index], 0)
+                # 頭の向きに合わせて舌を回転
+                if x_change == 1 and y_change == 0:  # 右方向
+                    rotated_tongue = pygame.transform.rotate(snake_tongue_images[tongue_index], 270)
+                elif x_change == -1 and y_change == 0:  # 左方向
+                    rotated_tongue = pygame.transform.rotate(snake_tongue_images[tongue_index], 90)
+                elif x_change == 0 and y_change == 1:  # 下方向
+                    rotated_tongue = pygame.transform.rotate(snake_tongue_images[tongue_index], 180)
+                elif x_change == 0 and y_change == -1:  # 上方向
+                    rotated_tongue = pygame.transform.rotate(snake_tongue_images[tongue_index], 0)
+                else:
+                    rotated_tongue = snake_tongue_images[tongue_index]
+                    
+                tongue_width, tongue_height = rotated_tongue.get_size()
+                dis.blit(rotated_tongue, ((x + x_change) * size_block + (size_block - tongue_width) / 2,
+                                          (y + y_change) * size_block + (size_block - tongue_height) / 2))
+
+                tongue_counter += 1  # 舌のカウントを増やす
+
+                if tongue_counter >= len(snake_tongue_images): # 21回画像を表示したら舌をリセット
+                    tongue_active = False
+                else:
+                    tongue_index = (tongue_index + 1) % len(snake_tongue_images) # `tongue_index` を次の画像に変更
+
+            else:
+                # 舌をランダムに開始するタイミングを決定
+                if random.random() < 0.025:  # ??% の確率で舌を表示開始
+                    tongue_active = True
+                    tongue_counter = 0
+                    tongue_index = 0
+                    
 
         else:
             # 体の部分は単色で描画
@@ -360,6 +437,8 @@ async def game_loop():
             food_x, food_y = make_food()
             walls = make_wall(snake_list, food_x, food_y)
 
+            key_press = False
+
             game_init = False
 
         elif game_close:
@@ -398,6 +477,8 @@ async def game_loop():
                 if event.type == pygame.QUIT:
                     game_close = True
                 if event.type == pygame.KEYDOWN:
+                    if (x_change, y_change) != (0, 0):
+                        key_press = True
                     if difficulty == EASY: #EASYのとき
                         if event.key == pygame.K_LEFT and x_change == 0:
                             x_change = -1
@@ -478,7 +559,7 @@ async def game_loop():
             draw_food(dis, food_x, food_y)
             if difficulty == MEDIUM:
                 draw_wall(dis, walls)
-            draw_snake(dis, snake_list, snake_head_image, x_change, y_change)
+            draw_snake(dis, snake_list, snake_head_image, snake_mouth_image, snake_tongue_images, key_press x_change, y_change, food_x, food_y)
             show_score(dis, font_score, length_of_snake - 1)
             pygame.display.update()
 
