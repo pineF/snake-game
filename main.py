@@ -54,7 +54,7 @@ key_image = pygame.image.load("img/key.png")
 key_image = pygame.transform.scale(key_image, (250, 150))
 
 # 蛇のあたま
-snake_head_image = pygame.image.load("img/snake-head.png")
+snake_head_image = pygame.image.load("img/snake_head.png")
 snake_head_image = pygame.transform.scale(snake_head_image, ((size_block*32/26)+1, (size_block*32/26)+1))
 
 # えさ
