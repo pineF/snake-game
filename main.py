@@ -441,7 +441,10 @@ async def game_loop():
         ### 効果音の読み込み ####################################
         bite_sound = pygame.mixer.Sound("sfx/bite_sound.ogg")
         gameover_sound = pygame.mixer.Sound("sfx/gameover_sound.ogg")
-        move_sound = pygame.mixer.Sound("sfx/move_sound.ogg")
+        move_up_sound = pygame.mixer.Sound("sfx/move_up.mp3")
+        move_right_sound = pygame.mixer.Sound("sfx/move_right.mp3")
+        move_down_sound = pygame.mixer.Sound("sfx/move_down.mp3")
+        move_left_sound = pygame.mixer.Sound("sfx/move_left.mp3")
         ##########################################################
         
     while True:
@@ -505,44 +508,56 @@ async def game_loop():
                         if event.key == pygame.K_LEFT and x_change == 0:
                             x_change = -1
                             y_change = 0
+                            move_left_sound.play()
                         elif event.key == pygame.K_RIGHT and x_change == 0:
                             x_change = 1
                             y_change = 0
+                            move_right_sound.play()
                         elif event.key == pygame.K_UP and y_change == 0:
                             y_change = -1
                             x_change = 0
+                            move_up_sound.play()
                         elif event.key == pygame.K_DOWN and y_change == 0:
                             y_change = 1
                             x_change = 0
-                        move_sound.play()
+                            move_down_sound.play()
+                        
                     elif difficulty == MEDIUM: #MEDIUMのとき                 
                         if event.key == pygame.K_LEFT and x_change == 0:
                             x_change = -1
                             y_change = 0
+                            move_left_sound.play()
                         elif event.key == pygame.K_RIGHT and x_change == 0:
                             x_change = 1
                             y_change = 0
+                            move_right_sound.play()
                         elif event.key == pygame.K_UP and y_change == 0:
                             y_change = -1
                             x_change = 0
+                            move_up_sound.play()
                         elif event.key == pygame.K_DOWN and y_change == 0:
                             y_change = 1
                             x_change = 0
-                        move_sound.play()
+                            move_down_sound.play()
+                        
                     else: #HARDのとき
                         if event.key == pygame.K_LEFT and x_change == 0:
                             x_change = 1
                             y_change = 0
+                            move_left_sound.play()
                         elif event.key == pygame.K_RIGHT and x_change == 0:
                             x_change = -1
                             y_change = 0
+                            move_right_sound.play()
                         elif event.key == pygame.K_UP and y_change == 0:
                             y_change = 1
                             x_change = 0
+                            move_up_sound.play()
                         elif event.key == pygame.K_DOWN and y_change == 0:
                             y_change = -1
                             x_change = 0
-                        move_sound.play()
+                            move_down_sound.play()
+                        
 
             # 蛇の移動処理
             x += x_change
