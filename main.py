@@ -79,6 +79,28 @@ for i in range(21):
     snake_tongue_images.append(tongue_image) #1枚の画像をn回追加する
     snake_tongue_images.append(tongue_image)
 
+# 蛇の口
+snake_mouth_image = pygame.image.load("img/snake_mouth.png")
+snake_mouth_image = pygame.transform.scale(snake_mouth_image, (35, 810))
+
+cut_rect1 = pygame.Rect(0, 324, 35, 54)  # 切り取る領域を指定 (例: (x, y, 幅, 高さ))
+snake_mouth_image = snake_mouth_image.subsurface(cut_rect1) # `subsurface` を使って部分的に切り取る
+snake_mouth_image = pygame.transform.scale(snake_mouth_image, (size_block*1.4, size_block*1.4))
+snake_mouth_image = pygame.transform.rotate(snake_mouth_image, 90)
+
+# 蛇の舌
+snake_tongue_image = pygame.image.load("img/snake_tongue.png")
+snake_tongue_image = pygame.transform.scale(snake_tongue_image, (48, 504))
+
+snake_tongue_images = []
+for i in range(21):
+    cut_rect2 = pygame.Rect(0, i * 24, 48, 24)
+    tongue_image = snake_tongue_image.subsurface(cut_rect2)
+    tongue_image = pygame. transform.scale(tongue_image, (size_block*1.1, size_block*1.1))
+    tongue_image = pygame.transform.rotate(tongue_image, 90)
+    snake_tongue_images.append(tongue_image) #1枚の画像をn回追加する
+    snake_tongue_images.append(tongue_image)
+
 # えさ
 food_image = pygame.image.load("img/food.png")
 food_image = pygame.transform.scale(food_image, (size_block, size_block))
