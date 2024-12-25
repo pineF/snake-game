@@ -441,10 +441,10 @@ async def game_loop():
         ### 効果音の読み込み ####################################
         bite_sound = pygame.mixer.Sound("sfx/bite_sound.ogg")
         gameover_sound = pygame.mixer.Sound("sfx/gameover_sound.ogg")
-        move_up_sound = pygame.mixer.Sound("sfx/move_up.mp3")
-        move_right_sound = pygame.mixer.Sound("sfx/move_right.mp3")
-        move_down_sound = pygame.mixer.Sound("sfx/move_down.mp3")
-        move_left_sound = pygame.mixer.Sound("sfx/move_left.mp3")
+        move_up_sound = pygame.mixer.Sound("sfx/move_up.ogg")
+        move_right_sound = pygame.mixer.Sound("sfx/move_right.ogg")
+        move_down_sound = pygame.mixer.Sound("sfx/move_down.ogg")
+        move_left_sound = pygame.mixer.Sound("sfx/move_left.ogg")
         ##########################################################
         
     while True:
