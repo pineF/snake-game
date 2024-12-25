@@ -163,7 +163,7 @@ def draw_snake(dis, snake_list, snake_head_image, snake_mouth_image, snake_tongu
 
                 tongue_counter += 1  # 舌のカウントを増やす
 
-                if tongue_counter >= len(snake_tongue_images): # 21回画像を表示したら舌をリセット
+                if tongue_counter >= len(snake_tongue_images): # n回画像を表示したら舌をリセット
                     tongue_active = False
                 else:
                     tongue_index = (tongue_index + 1) % len(snake_tongue_images) # `tongue_index` を次の画像に変更
@@ -559,7 +559,7 @@ async def game_loop():
             draw_food(dis, food_x, food_y)
             if difficulty == MEDIUM:
                 draw_wall(dis, walls)
-            draw_snake(dis, snake_list, snake_head_image, snake_mouth_image, snake_tongue_images, key_press x_change, y_change, food_x, food_y)
+            draw_snake(dis, snake_list, snake_head_image, snake_mouth_image, snake_tongue_images, key_press, x_change, y_change, food_x, food_y)
             show_score(dis, font_score, length_of_snake - 1)
             pygame.display.update()
 
