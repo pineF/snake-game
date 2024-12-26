@@ -365,9 +365,9 @@ async def show_ranking_and_wait(dis, font, scores, modes, mode_names):
     
     # モードごとのランキングを描画
     ### フォント設定 #######################################
-    ranking_font = pygame.font.Font("fonts/ROCKB.TTF", 30)
-    ranking_font2 = pygame.font.Font("fonts/COOPBL.TTF", 25)
-    font_msg = pygame.font.Font("fonts/bahnschrift.ttf", 30)
+    ranking_font = pygame.font.SysFont("fonts/ROCKB.TTF", 30)
+    ranking_font2 = pygame.font.SysFont("fonts/COOPBL.TTF", 25)
+    font_msg = pygame.font.SysFont("fonts/bahnschrift.ttf", 30)
     ########################################################
 
     # メッセージの表示
@@ -435,7 +435,7 @@ async def game_loop():
         clock = pygame.time.Clock()
 
         ### フォント設定 ########################################
-        font_score = pygame.font.Font("fonts/COOPBL.TTF", 35)
+        font_score = pygame.font.SysFont("fonts/COOPBL.TTF", 35)
         ########################################################
         
         ### 効果音の読み込み ####################################
