@@ -312,7 +312,7 @@ async def choose_difficulty():
     difficulty = None
 
     #### フォント設定##########################################
-    font1 = pygame.font.Font("fonts/bahnschrift.ttf", 35, bold = True)
+    font1 = pygame.font.Font("fonts/bahnschrift.ttf", 35)
     font2 = pygame.font.Font("fonts/bahnschrift.ttf", 25)
     ###########################################################
     
